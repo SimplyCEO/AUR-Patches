@@ -22,7 +22,7 @@ get_shit_package_name_definition()
 get_patch()
 {
   curl -s -o PKGBUILD.patch "https://raw.githubusercontent.com/SimplyCEO/AUR-Patches/refs/heads/master/${PKGNAME}/PKGBUILD.patch"
-  if [ $? -ne 0 ] || grep -iq "NOT FOUND" PKGBUILD.patch; then
+  if [ $? -ne 0 ] || grep -iq "NOT FOUND" PKGBUILD.patch || grep -iq "Moved Permanently" PKGBUILD.patch; then
     rm --force PKGBUILD.patch
     return 1
   fi
