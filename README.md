@@ -28,28 +28,23 @@ get_patch()
   fi
 }
 
-# --> Ignore patching during key generation.
-if [ ! -f .doNotPatchAgain ]; then
-  # --> Fetch existing patch file for PKGBUILD.
-  PKGNAME="$(awk -F '=' '/^pkgname=/ {print $2}' PKGBUILD)"
+
+# --> Fetch existing patch file for PKGBUILD.
+PKGNAME="$(awk -F '=' '/^pkgname=/ {print $2}' PKGBUILD)"
+get_patch
+if [ $? -eq 1 ]; then
+  PKGNAME="$(awk -F '=' '/^pkgbase=/ {print $2}' PKGBUILD)"
   get_patch
   if [ $? -eq 1 ]; then
-    PKGNAME="$(awk -F '=' '/^pkgbase=/ {print $2}' PKGBUILD)"
+    get_shit_package_name_definition
     get_patch
-    if [ $? -eq 1 ]; then
-      get_shit_package_name_definition
-      get_patch
-    fi
   fi
+fi
 
-  # --> Patch the PKGBUILD file if there is one for it.
-  if [ -f PKGBUILD.patch ]; then
-    printf "\033[1;34m::\033[0m Patch file exists for PKGBUILD. Patching...\n"
-    patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
-    touch .doNotPatchAgain
-    makepkg -g >> PKGBUILD
-    rm .doNotPatchAgain
-  fi
+# --> Patch the PKGBUILD file if there is one for it.
+if [ -f PKGBUILD.patch ]; then
+  printf "\033[1;34m::\033[0m Patch file exists for PKGBUILD. Patching...\n"
+  patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
 fi
 ```
 
