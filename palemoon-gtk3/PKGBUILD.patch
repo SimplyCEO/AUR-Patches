@@ -1,0 +1,17 @@
+--- PKGBUILD	2025-04-22 13:44:37.212058217 -0300
++++ PKGBUILD.backup	2025-04-22 15:55:14.958607560 -0300
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: Michal Wojdyla < micwoj9292 at gmail dot com >
+ # Contributor:  WorMzy Tykashi <wormzy.tykashi@gmail.com>
+ # Contributor: artiom <a.mv at gmx dot fr>
+@@ -45,7 +47,7 @@
+   cd ${_repo}
+   export MOZBUILD_STATE_PATH="${srcdir}/mozbuild"
+   export MOZCONFIG="${srcdir}/mozconfig"
+-  export CPPFLAGS="${CPPFLAGS} -O2 -Wno-format-overflow"
++  export CPPFLAGS="${CXXFLAGS} -Wno-format-overflow"
+   ./mach build
+ }
+ 
