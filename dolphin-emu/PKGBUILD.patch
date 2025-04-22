@@ -1,6 +1,12 @@
---- PKGBUILD	2025-04-22 12:49:13.505249324 -0300
-+++ PKGBUILD.backup	2025-04-22 12:50:59.173968664 -0300
-@@ -28,7 +28,7 @@
+--- PKGBUILD	2025-04-22 15:38:09.241666537 -0300
++++ PKGBUILD.backup	2025-04-22 15:32:13.289687004 -0300
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: Daniel Peukert <daniel@peukert.cc>
+ # Contributor: Maxime Gauduin <alucryd@archlinux.org>
+ # Contributor: Lightning <sgsdxzy@gmail.com>
+@@ -28,7 +30,7 @@
  )
  makedepends=(
  	'alsa-lib' 'cmake' 'git' 'libevdev' 'libminiupnpc.so' 'libpulse'
@@ -9,7 +15,7 @@
  )
  checkdepends=('gtest')
  optdepends=('pulseaudio: PulseAudio backend')
-@@ -58,6 +58,7 @@
+@@ -58,6 +60,7 @@
          '7db29101fc7496355776eee0701ddb971147aea096828f73dc02501d8981a8f1105f16e206a24f3ab94d169dc7ea0443c37b664c25ba064533b7cdcc644bd6f4'
          'd9e6ba73de8e1c49a7ebf9efe6caffcffbe1a545dfb61caebe2b830d8f496aaa221269c25a3f849ba02228dfb866b362c8c74f7e897e66a9362469dea679721d')
  
@@ -17,7 +23,7 @@
  _sourcedirectory="$pkgbase"
  
  prepare() {
-@@ -108,16 +109,25 @@
+@@ -108,16 +111,25 @@
  	# CMAKE_SKIP_RPATH - do not add run time path information (the package in the repos does it, presumably because of reproducible builds)
  	# USE_SYSTEM_LIBS - we want to use system libs where possible
  	# USE_SYSTEM_LIBMGBA - the current version of mgba in the repos is not compatible with Dolphin
@@ -45,7 +51,7 @@
  }
  
  check() {
-@@ -125,10 +135,6 @@
+@@ -125,10 +137,6 @@
  	cd "$srcdir/$_sourcedirectory/"
  	_checkversion="$(git describe | cut --delimiter='-' --fields=1-2)"
  
