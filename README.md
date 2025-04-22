@@ -28,16 +28,19 @@ get_patch()
   fi
 }
 
-
 # --> Fetch existing patch file for PKGBUILD.
 PKGNAME="$(awk -F '=' '/^pkgname=/ {print $2}' PKGBUILD)"
 get_patch
 if [ $? -eq 1 ]; then
-  PKGNAME="$(awk -F '=' '/^pkgbase=/ {print $2}' PKGBUILD)"
+  PKGNAME="$(awk -F '=' '/^_pkgname=/ {print $2}' PKGBUILD)"
   get_patch
   if [ $? -eq 1 ]; then
-    get_shit_package_name_definition
+    PKGNAME="$(awk -F '=' '/^pkgbase=/ {print $2}' PKGBUILD)"
     get_patch
+    if [ $? -eq 1 ]; then
+      get_shit_package_name_definition
+      get_patch
+    fi
   fi
 fi
 
