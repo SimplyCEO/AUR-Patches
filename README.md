@@ -46,7 +46,7 @@ fi
 
 # --> Patch the PKGBUILD file if there is one for it.
 if [ -f PKGBUILD.patch ]; then
-  if ! grep "Patched AUR PKGBUILD" PKGBUILD; then
+  if ! grep -iq "Patched AUR PKGBUILD" PKGBUILD; then
     printf "\033[1;34m::\033[0m Patch file exists for PKGBUILD. Patching...\n"
     patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
   fi
