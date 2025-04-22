@@ -1,0 +1,32 @@
+--- PKGBUILD	2025-04-19 00:26:09.098152451 -0300
++++ PKGBUILD.backup	2025-04-22 16:11:38.984550980 -0300
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Contributor: katt <magunasu.b97@gmail.com>
+ 
+ pkgname=duckstation-git
+@@ -119,8 +121,6 @@
+                         echo "Building $dep_name..."
+                         cmake -B "build-$dep_name" -S "$src_name" \
+                             -G Ninja \
+-                            -DCMAKE_C_COMPILER=clang \
+-                            -DCMAKE_CXX_COMPILER=clang++ \
+                             -DCMAKE_EXE_LINKER_FLAGS_INIT="-fuse-ld=lld" \
+                             -DCMAKE_MODULE_LINKER_FLAGS_INIT="-fuse-ld=lld" \
+                             -DCMAKE_SHARED_LINKER_FLAGS_INIT="-fuse-ld=lld" \
+@@ -138,11 +138,9 @@
+ 
+     cmake -B build -S duckstation \
+         -G Ninja \
+-        -DCMAKE_BUILD_TYPE=None \
+-        -DCMAKE_C_COMPILER=clang \
+-        -DCMAKE_CXX_COMPILER=clang++ \
+-        -DCMAKE_C_FLAGS="$CFLAGS -Wno-error=format-security" \
+-        -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-error=format-security" \
++        -DCMAKE_BUILD_TYPE=Release \
++        -DCMAKE_C_FLAGS="${CFLAGS} -Wno-error=format-security" \
++        -DCMAKE_CXX_FLAGS="${CXXFLAGS} -Wno-error=format-security" \
+         -DCMAKE_EXE_LINKER_FLAGS_INIT="-fuse-ld=lld" \
+         -DCMAKE_MODULE_LINKER_FLAGS_INIT="-fuse-ld=lld" \
+         -DCMAKE_SHARED_LINKER_FLAGS_INIT="-fuse-ld=lld" \
