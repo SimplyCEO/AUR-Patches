@@ -14,7 +14,7 @@ To use it, search for the package name and fetch the repository:
 
 # --> Retrieve the package name based on key.
 PKGNAME=""
-get_package_value()
+get_package_name()
 {
   local FILETMP=$(mktemp)
   local PACKAGE=""
@@ -23,16 +23,16 @@ get_package_value()
   local LCOUNT=0
   local KEY="$1"
   while IFS= read -r LINE; do
-    if echo "${LINE}" | grep -q "^${KEY}="; then
+    if printf "${LINE}" | grep -q "^${KEY}="; then
       PACKAGE="${LINE#${KEY}=}"
-      echo "PATCHER_RETURN=${PACKAGE}" >> "${FILETMP}"
+      printf "PATCHER_RETURN=${PACKAGE}\n" >> "${FILETMP}"
       break
     fi
 
     LCOUNT=$((LCOUNT + 1))
     if [ "${LCOUNT}" -gt 20 ]; then break; fi
 
-    echo "${LINE}" >> "${FILETMP}"
+    printf "${LINE}\n" >> "${FILETMP}"
   done < PKGBUILD
 
   # --> Source the key and retrieve the value
@@ -43,30 +43,29 @@ get_package_value()
   # --> Return error if no package was found.
   if [ -z "${PACKAGE}" ]; then return 1; fi
 
-  # --> Remove git type.
-  if [ "${PACKAGE: -4}" = "-git" ]; then
-    PACKAGELEN=${#PACKAGE}
-    PACKAGE="${PACKAGE:0:$((PACKAGELEN - 4))}"
-  fi
-
   # --> Assign to variable.
   PKGNAME="${PACKAGE}"
+
+  return 0
 }
 
 # --> Retrieve package file from repository, if exist.
-get_patch()
+fetch_patch()
 {
   curl -s -o PKGBUILD.patch "https://raw.githubusercontent.com/SimplyCEO/AUR-Patches/refs/heads/master/${PKGNAME}/PKGBUILD.patch"
-  if [ $? -ne 0 ] || grep -iq "NOT FOUND" PKGBUILD.patch || grep -iq "Moved Permanently" PKGBUILD.patch; then
-    rm --force PKGBUILD.patch
+  if [ $? -ne 0 ] || \
+     grep -iq "NOT FOUND" PKGBUILD.patch || \
+     grep -iq "MOVED PERMANENTLY" PKGBUILD.patch; then
+    rm -f PKGBUILD.patch
     return 1
   fi
+  return 0
 }
 
 # --> Fetch existing patch file for PKGBUILD.
-get_package_value "pkgname"
-if [ $? -ne 0 ]; then get_package_value "pkgbase"; fi
-get_patch
+get_package_name "pkgname"
+if [ $? -ne 0 ]; then get_package_name "pkgbase"; fi
+fetch_patch
 
 # --> Patch the PKGBUILD file if there is one for it.
 if [ -f PKGBUILD.patch ]; then
