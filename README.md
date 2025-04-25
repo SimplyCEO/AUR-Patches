@@ -72,6 +72,7 @@ if [ -f PKGBUILD.patch ]; then
   if ! grep -iq "Patched AUR PKGBUILD" PKGBUILD; then
     printf "\033[1;34m::\033[0m \033[1mPatch file exists for PKGBUILD. Patching...\033[0m\n"
     patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
+    makepkg -g >> PKGBUILD
   fi
 fi
 ```
