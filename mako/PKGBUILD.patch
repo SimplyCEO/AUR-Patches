@@ -1,0 +1,40 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -6,12 +6,12 @@
+ pkgrel=1
+ license=('MIT')
+ pkgdesc='Lightweight notification daemon for Wayland'
+-makedepends=("meson" "scdoc" "systemd" "wayland-protocols" "git")
++makedepends=("meson" "scdoc" "libelogind" "wayland-protocols" "git")
+ depends=(
+     "gdk-pixbuf2"
+     "pango"
+     "cairo"
+-    "systemd-libs"
++    "libelogind"
+     "wayland"
+ )
+ optdepends=("jq: support for 'makoctl menu'")
+@@ -19,7 +19,6 @@
+ url='http://mako-project.org'
+ source=(
+     "${pkgname%-*}::git+https://github.com/emersion/mako.git"
+-    "mako.service"
+     "0001-Fix-DBus-service.patch"
+ )
+ sha1sums=('SKIP'
+@@ -46,7 +45,7 @@
+     arch-meson -Dzsh-completions=true \
+         -Dbash-completions=true \
+         -Dfish-completions=true \
+-        -Dsd-bus-provider=libsystemd \
++        -Dsd-bus-provider=libelogind \
+         build
+     ninja -C build
+ }
+@@ -55,5 +54,4 @@
+     cd "$_pkgname"
+     DESTDIR="$pkgdir/" ninja -C build install
+     install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/"${pkgname%-*}"/LICENSE
+-    install -Dm0644 ../mako.service -t "$pkgdir"/usr/lib/systemd/user/
+ }
