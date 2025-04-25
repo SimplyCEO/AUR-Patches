@@ -1,6 +1,12 @@
 --- PKGBUILD
 +++ PKGBUILD.backup
-@@ -6,12 +6,12 @@
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: Thorben Günther <echo YWRtaW5AeGVucm94Lm5ldAo= | base64 -d>
+ # Contributor: Drew DeVault <sir@cmpwn.com>
+ pkgname=mako-git
+@@ -6,12 +8,12 @@
  pkgrel=1
  license=('MIT')
  pkgdesc='Lightweight notification daemon for Wayland'
@@ -15,7 +21,7 @@
      "wayland"
  )
  optdepends=("jq: support for 'makoctl menu'")
-@@ -19,7 +19,6 @@
+@@ -19,7 +21,6 @@
  url='http://mako-project.org'
  source=(
      "${pkgname%-*}::git+https://github.com/emersion/mako.git"
@@ -23,7 +29,7 @@
      "0001-Fix-DBus-service.patch"
  )
  sha1sums=('SKIP'
-@@ -46,7 +45,7 @@
+@@ -46,7 +47,7 @@
      arch-meson -Dzsh-completions=true \
          -Dbash-completions=true \
          -Dfish-completions=true \
@@ -32,7 +38,7 @@
          build
      ninja -C build
  }
-@@ -55,5 +54,4 @@
+@@ -55,5 +56,4 @@
      cd "$_pkgname"
      DESTDIR="$pkgdir/" ninja -C build install
      install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/"${pkgname%-*}"/LICENSE
