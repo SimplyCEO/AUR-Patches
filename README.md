@@ -12,6 +12,32 @@ To use it, search for the package name and fetch the repository:
 #####################
 # From: https://github.com/SimplyCEO/AUR-Patches
 
+# --> Retrieve the package name from array.
+PKGARRAY=""
+pkgarray()
+{
+  local L1COUNT=0
+  local STRING=""
+  local LSTART=$1
+  local FILE="$2"
+  local PKGKEY="$3"
+
+  while IFS= read -r LINE; do
+    if [ $L1COUNT -ge $LSTART ]; then
+      STRING="${STRING}${LINE}"
+      if [ "${LINE}" = ")" ]; then break; fi
+    fi
+    L1COUNT=$((L1COUNT + 1))
+  done < "${FILE}"
+
+  STRING=${STRING#${PKGKEY}=(}
+  STRING=${STRING%)*}
+
+  local ARRAY=($STRING)
+
+  PKGARRAY="${ARRAY[0]//\'/}"
+}
+
 # --> Retrieve the package name based on key.
 PKGNAME=""
 get_package_name()
@@ -25,12 +51,16 @@ get_package_name()
   while IFS= read -r LINE; do
     if printf "${LINE}" | grep -q "^${KEY}="; then
       PACKAGE="${LINE#${KEY}=}"
+      if [ "${PACKAGE}" = "(" ]; then
+        pkgarray $LCOUNT "PKGBUILD" "${KEY}"
+        PACKAGE="${PKGARRAY}"
+      fi
       printf "PATCHER_RETURN=${PACKAGE}\n" >> "${FILETMP}"
       break
     fi
 
     LCOUNT=$((LCOUNT + 1))
-    if [ "${LCOUNT}" -gt 20 ]; then break; fi
+    if [ $LCOUNT -gt 20 ]; then break; fi
 
     printf "${LINE}\n" >> "${FILETMP}"
   done < PKGBUILD
