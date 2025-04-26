@@ -1,0 +1,75 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ #Maintainer: Gustavo Alvarez <sl1pkn07@gmail.com>
+ 
+ pkgbase=pipewire-git
+@@ -58,7 +60,6 @@
+   'rtkit'
+   'sbc'
+   'sdl2'
+-  'systemd'
+   'valgrind'
+   'vulkan-headers'
+   'vulkan-icd-loader'
+@@ -100,6 +101,7 @@
+     -D vulkan=enabled \
+     -D jack-devel=true \
+     -D libjack-path=/usr/lib \
++    -D systemd=disabled \
+     -D rlimits-install=false \
+     -D session-managers=[] \
+     -D bluez5-codec-lc3plus=disabled \
+@@ -234,7 +236,6 @@
+   _pick audio "usr/lib/spa-${_spa_ver}/filter-graph"
+   _pick audio "usr/lib/spa-${_spa_ver}/ffmpeg"
+   _pick audio "usr/lib/spa-${_spa_ver}/volume"
+-  _pick audio usr/lib/systemd/user/filter-chain.service
+   _pick audio usr/share/man/man1/pw-cat.1
+   _pick audio usr/share/man/man1/pw-loopback.1
+   _pick audio usr/share/man/man1/pw-mididump.1
+@@ -287,8 +288,6 @@
+   _pick pulse usr/bin/pipewire-pulse
+   _pick pulse "usr/lib/pipewire-${_api_ver}/libpipewire-module-protocol-pulse.so"
+   _pick pulse "usr/lib/pipewire-${_api_ver}/libpipewire-module-pulse-tunnel.so"
+-  _pick pulse usr/lib/systemd/user/pipewire-pulse.socket
+-  _pick pulse usr/lib/systemd/user/pipewire-pulse.service
+   _pick pulse usr/lib/udev
+   _pick pulse usr/share/man/man1/pipewire-pulse.1
+   _pick pulse usr/share/man/man5/pipewire-pulse.conf.5
+@@ -389,7 +388,6 @@
+     'gcc-libs' # libgcc_s.so
+     'glibc' # libc.so
+     'dbus' 'libdbus-1.so'
+-    'systemd-libs' 'libsystemd.so'
+   )
+   optdepends=('realtime-privileges: realtime privileges with rt module')
+   provides=("libpipewire=${pkgver}" "libpipewire-${_api_ver}.so")
+@@ -506,7 +504,7 @@
+     'gcc-libs' # ibgcc_s.so
+     'glibc' # libc.so  libm.so
+     'alsa-lib' 'libasound.so'
+-    'systemd-libs' 'libudev.so'
++    'libudev.so'
+   )
+   backup=(
+     'usr/share/alsa/alsa.conf.d/50-pipewire.conf'
+@@ -629,7 +627,6 @@
+     'dbus' 'libdbus-1.so'
+     'glib2' 'libgio-2.0.so' 'libglib-2.0.so' 'libgobject-2.0.so'
+     'libpulse' 'libpulse.so'
+-    'systemd-libs' 'libsystemd.so'
+   )
+   backup=(
+     'usr/share/pipewire/pipewire-pulse.conf'
+@@ -694,7 +691,7 @@
+     "libpipewire=${pkgver}" "libpipewire-${_api_ver}.so"
+     'pipewire-session-manager'
+     'glibc' # libc.so
+-    'systemd-libs' 'libudev.so'
++    'libudev.so'
+     'sh'
+   )
+   provides=("pipewire-v4l2=${pkgver}")
