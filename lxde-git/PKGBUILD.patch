@@ -1,0 +1,39 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -1,17 +1,20 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: Raimar Buehmann (raimar)
+ 
+-pkgname=lxpanel-git
+-pkgver=0.10.1.r2514.20230817
++pkgname=lxpanel-gtk3-git
++_pkgname=lxpanel
++pkgver=0.10.1.r2644.20250409
+ pkgrel=1
+-pkgdesc='Lightweight X11 desktop panel for LXDE'
++pkgdesc='Lightweight X11 desktop panel for LXDE (GTK+ 3 version)'
+ arch=('i686' 'x86_64')
+ license=('GPL2')
+ url='https://lxde.org/'
+-groups=('lxde-git')
+-depends=('alsa-lib' 'lxmenu-data' 'libwnck' 'libfm' 'libkeybinder2')
++groups=('lxde-gtk3')
++depends=('alsa-lib' 'curl' 'menu-cache' 'lxmenu-data' 'libwnck3' 'libfm-gtk3' 'libkeybinder3')
+ makedepends=('intltool' 'docbook-xml' 'docbook-xsl' 'wireless_tools' 'git')
+-provides=('lxpanel')
+-conflicts=('lxpanel')
++provides=($_pkgname)
++conflicts=($_pkgname)
+ optdepends=('wireless_tools: netstat plugin')
+ source=(
+ 	$pkgname::git+https://github.com/lxde/lxpanel
+@@ -48,7 +51,7 @@
+ 	cd $pkgname
+ 	./autogen.sh
+ 	CFLAGS+=' -lgmodule-2.0'
+-	./configure --prefix=/usr --sysconfdir=/etc --enable-man
++	./configure --prefix=/usr --sysconfdir=/etc --enable-man --enable-gtk3
+ 	make
+ }
+ 
