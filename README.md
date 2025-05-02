@@ -27,7 +27,7 @@ fetch_patch() { local PATCHFILE="$1"; curl -s -o "${PATCHFILE}.patch" "https://r
 get_package_name "PKGBUILD" "pkgname"; if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi; if [ $? -eq 0 ]; then fetch_patch "PKGBUILD"; fi
 
 # --> Patch the PKGBUILD file if there is one for it.
-if [ -f PKGBUILD.patch ]; then if ! grep -iq "Patched AUR PKGBUILD" PKGBUILD; then printf "\033[1;34m::\033[0m \033[1mPatch file exists for PKGBUILD. Patching...\033[0m\n"; patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1; makepkg -g >> PKGBUILD; fi; fi
+if [ -f PKGBUILD.patch ]; then if ! grep -iq "Patched AUR PKGBUILD" PKGBUILD || ! grep -iq "Patched AUR PKGBUILD" PKGBUILD; then printf "\033[1;34m::\033[0m \033[1mPatch file exists for PKGBUILD. Patching...\033[0m\n"; patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1; makepkg -g >> PKGBUILD; fi; fi
 ```
 
 This script need to be placed somewhere in `makepkg.conf`.
