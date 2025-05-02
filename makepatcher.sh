@@ -37,23 +37,27 @@ get_package_name()
 
   # --> Read package until key value.
   local LCOUNT=0
-  local KEY="$1"
-  while IFS= read -r LINE; do
-    if printf "${LINE}" | grep -q "^${KEY}="; then
-      PACKAGE="${LINE#${KEY}=}"
-      if [ "${PACKAGE}" = "(" ]; then
-        pkgarray $LCOUNT "PKGBUILD" "${KEY}"
-        PACKAGE="${PKGARRAY}"
+  local FILE="$1"
+  local KEY="$2"
+
+  if [ -f "${FILE}" ]; then
+    while IFS= read -r LINE; do
+      if printf "${LINE}" | grep -q "^${KEY}="; then
+        PACKAGE="${LINE#${KEY}=}"
+        if [ "${PACKAGE}" = "(" ]; then
+          pkgarray $LCOUNT "${FILE}" "${KEY}"
+          PACKAGE="${PKGARRAY}"
+        fi
+        printf "PATCHER_RETURN=${PACKAGE}\n" >> "${FILETMP}"
+        break
       fi
-      printf "PATCHER_RETURN=${PACKAGE}\n" >> "${FILETMP}"
-      break
-    fi
 
-    LCOUNT=$((LCOUNT + 1))
-    if [ $LCOUNT -gt 20 ]; then break; fi
+      LCOUNT=$((LCOUNT + 1))
+      if [ $LCOUNT -gt 20 ]; then break; fi
 
-    printf "${LINE}\n" >> "${FILETMP}"
-  done < PKGBUILD
+      printf "${LINE}\n" >> "${FILETMP}"
+    done < "${FILE}"
+  fi
 
   # --> Source the key and retrieve the value
   . "${FILETMP}"
@@ -72,20 +76,22 @@ get_package_name()
 # --> Retrieve package file from repository, if exist.
 fetch_patch()
 {
-  curl -s -o PKGBUILD.patch "https://raw.githubusercontent.com/SimplyCEO/AUR-Patches/refs/heads/master/${PKGNAME}/PKGBUILD.patch"
+  local PATCHFILE="$1"
+
+  curl -s -o "${PATCHFILE}.patch" "https://raw.githubusercontent.com/SimplyCEO/AUR-Patches/refs/heads/master/${PKGNAME}/${PATCHFILE}.patch"
   if [ $? -ne 0 ] || \
-     grep -iq "NOT FOUND" PKGBUILD.patch || \
-     grep -iq "MOVED PERMANENTLY" PKGBUILD.patch; then
-    rm -f PKGBUILD.patch
+     grep -iq "NOT FOUND" "${PATCHFILE}.patch" || \
+     grep -iq "MOVED PERMANENTLY" "${PATCHFILE}.patch"; then
+    rm -f "${PATCHFILE}.patch"
     return 1
   fi
   return 0
 }
 
 # --> Fetch existing patch file for PKGBUILD.
-get_package_name "pkgname"
-if [ $? -ne 0 ]; then get_package_name "pkgbase"; fi
-fetch_patch
+get_package_name "PKGBUILD" "pkgname"
+if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi
+if [ $? -eq 0 ]; then fetch_patch "PKGBUILD"; fi
 
 # --> Patch the PKGBUILD file if there is one for it.
 if [ -f PKGBUILD.patch ]; then
