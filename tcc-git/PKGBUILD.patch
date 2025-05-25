@@ -1,0 +1,29 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -1,9 +1,11 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: Jonathon Fernyhough <jonathon_at m2x dot dev>
+ # Contributor: John Trengrove
+ # Contributor: Alexander Rødseth <rodseth@gmail.com>
+ 
+ pkgname=tcc-git
+-pkgver=0.9.27.r797.g4e0e9b8
++pkgver=0.9.27.r1226.g83de5325
+ pkgrel=1
+ pkgdesc='Tiny C Compiler'
+ arch=('x86_64' 'i686')
+@@ -23,6 +25,13 @@
+ 
+ build() {
+   cd tinycc
++  # > AUR-Patches: Use TinyCC to compile itself, as others compilers may not work on doing so.
++  if [ ! -z "$(tcc --version)" ]; then
++    CC=tcc;
++    CFLAGS=$(echo "${CFLAGS}" | sed 's/-O[0-9]*\|-Ofast//g');
++    LDFLAGS=$(echo "${LDFLAGS}" | sed 's/-Wl,-O[0-9]*\|-Wl,-Ofast\|-Wl,--sort-common//g');
++  fi
++  # AUR-Patches <
+   ./configure --prefix=/usr
+   make
+ }
