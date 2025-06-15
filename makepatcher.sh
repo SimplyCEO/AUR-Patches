@@ -89,8 +89,14 @@ fetch_patch()
 }
 
 # --> Fetch existing patch file for PKGBUILD.
-get_package_name "PKGBUILD" "pkgname"
-if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi
+get_package_name "PKGBUILD" "_pkgbase"
+if [ $? -ne 0 ]; then
+  get_package_name "PKGBUILD" "_pkgname"
+  if [ $? -ne 0 ]; then
+    get_package_name "PKGBUILD" "pkgname"
+    if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi
+  fi
+fi
 if [ $? -eq 0 ]; then fetch_patch "PKGBUILD"; fi
 
 # --> Patch the PKGBUILD file if there is one for it.
