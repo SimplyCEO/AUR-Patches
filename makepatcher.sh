@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/hint/bash
+#
+# /etc/makepkg.conf.d/makepatcher.conf
+#
 
 # From: https://github.com/SimplyCEO/AUR-Patches
 
