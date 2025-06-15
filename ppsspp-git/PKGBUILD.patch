@@ -1,0 +1,35 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer: 
+ # Contributor: David Wu <xdavidwuph@gmail.com>
+ # Contributor: Maxime Gauduin <alucryd@archlinux.org>
+@@ -26,7 +28,6 @@
+   libglvnd
+   libpng
+   libzip
+-  ninja
+   python
+   sdl2
+   sdl2_ttf
+@@ -53,9 +54,6 @@
+ }
+ 
+ build() {
+-  export CC=clang
+-  export CXX=clang++
+-
+   # Rebuild ffmpeg locally
+   pushd ppsspp/ffmpeg
+   case "$CARCH" in
+@@ -68,7 +66,7 @@
+   esac
+   popd
+ 
+-  cmake -S ppsspp -B build-sdl -G Ninja \
++  cmake -S ppsspp -B build-sdl \
+     -DCMAKE_BUILD_TYPE=None \
+     -DCMAKE_SKIP_RPATH=ON \
+     -DHEADLESS=ON \
