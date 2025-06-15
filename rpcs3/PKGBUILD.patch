@@ -1,0 +1,16 @@
+--- PKGBUILD
++++ PKGBUILD.backup
+@@ -1,3 +1,5 @@
++# Patched AUR PKGBUILD
++
+ # Maintainer:  Vitalii Kuzhdin <vitaliikuzhdin@gmail.com>
+ # Contributor: Christopher Snowhill <kode54@gmail.com>
+ # Contributor: katt <magunasu.b97@gmail.com>
+@@ -196,6 +198,7 @@
+     -D CMAKE_POLICY_VERSION_MINIMUM=3.5
+     -D CMAKE_SKIP_RPATH=ON
+     -D CMAKE_LINKER=lld
++    -D DISABLE_LTO=TRUE
+     -D USE_NATIVE_INSTRUCTIONS=OFF # disable '-march=native'
+     -D USE_SYSTEM_FAUDIO=ON
+     -D USE_SYSTEM_CURL=ON
