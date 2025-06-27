@@ -91,24 +91,29 @@ fetch_patch()
   return 0
 }
 
-# --> Fetch existing patch file for PKGBUILD.
-get_package_name "PKGBUILD" "_pkgbase"
-if [ $? -ne 0 ]; then
-  get_package_name "PKGBUILD" "_pkgname"
+# --> If PKGBUILD is already modified then skip.
+if ! git diff --quiet PKGBUILD; then
+  printf "\033[1;34m::\033[0m \033[1mPKGBUILD has already been patched before. Continuning...\033[0m\n" >&2
+else
+  # --> Fetch existing patch file for PKGBUILD.
+  get_package_name "PKGBUILD" "_pkgbase"
   if [ $? -ne 0 ]; then
-    get_package_name "PKGBUILD" "pkgname"
-    if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi
+    get_package_name "PKGBUILD" "_pkgname"
+    if [ $? -ne 0 ]; then
+      get_package_name "PKGBUILD" "pkgname"
+      if [ $? -ne 0 ]; then get_package_name "PKGBUILD" "pkgbase"; fi
+    fi
   fi
-fi
-if [ $? -eq 0 ]; then fetch_patch "PKGBUILD"; fi
+  if [ $? -eq 0 ]; then fetch_patch "PKGBUILD"; fi
 
-# --> Patch the PKGBUILD file if there is one for it.
-if [ -f PKGBUILD.patch ]; then
-  if [ ! -z "$(grep -i "Patched PKGBUILD" PKGBUILD)" ] || \
-     [ ! -z "$(grep -i "Patched AUR PKGBUILD" PKGBUILD)" ]; then printf ""; else
-    printf "\033[1;34m::\033[0m \033[1mPatch file exists for PKGBUILD. Patching...\033[0m\n"
-    patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
-    makepkg -g >> PKGBUILD
+  # --> Patch the PKGBUILD file if there is one for it.
+  if [ -f PKGBUILD.patch ]; then
+    if [ ! -z "$(grep -i "Patched PKGBUILD" PKGBUILD)" ] || \
+       [ ! -z "$(grep -i "Patched AUR PKGBUILD" PKGBUILD)" ]; then printf "" >&2; else
+      printf "\033[1;34m::\033[0m \033[1mPatch file exists for PKGBUILD. Patching...\033[0m\n" >&2
+      patch -N PKGBUILD < PKGBUILD.patch > /dev/null 2>&1
+      makepkg -g >> PKGBUILD
+    fi
   fi
 fi
 
