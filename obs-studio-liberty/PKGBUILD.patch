@@ -1,0 +1,21 @@
+--- PKGBUILD
++++ PKGBUILD.editor
+@@ -0,0 +1,2 @@
++# Patched AUR PKGBUILD
++
+@@ -45 +46,0 @@
+-  "vlc" # It is necessary to build the package and work
+@@ -59 +59,0 @@
+-  "jack" # Deps of JACK plugin
+@@ -71 +70,0 @@
+-  "systemd-libs" # Deps of V4L2 plugin
+@@ -77 +75,0 @@
+-  "jack: JACK support"
+@@ -90 +87,0 @@
+-  "systemd-libs: V4L2 support"
+@@ -128 +124,0 @@
+-    -DENABLE_JACK=ON \
+@@ -131,0 +128,3 @@
++    -DENABLE_AJA=OFF \
++    -DENABLE_DECKLINK=OFF \
++    -DENABLE_VLC=OFF \
